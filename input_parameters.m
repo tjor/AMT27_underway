@@ -24,8 +24,8 @@ WAP_ROOT = lower(CRUISE); % tjor: `root" part of WAP file
 % dates
 inidate = "20180925";
 enddate = "20181028";
-%inidate = "20181015";
-%enddate = "20181025";
+%inidate = "20181003";
+%enddate = "20181005";
 
 % Hour of the day for which Wapped files are searched
 % (day is not processed if a file for the specified hour is not found)
@@ -45,33 +45,30 @@ UWAY_WAP_SUBDIR = "/";
 % Implemented instruments to selct from are 
 % {"ctd","acs","bb3","cstar","acs2","ac9","clam"}
 if strcmp (UWAY_WAP_SUBDIR, "With_AC9_Without_ACS/") == 1 % tjor: selects `bfiles" for 2018 cruise
-    dh8_instruments = {"ac9", "bb3", "cstar", "ctd"};
+ %   dh8_instruments = {"ac9", "bb3", "cstar", "ctd"};
     % Ports must corresponds to same ports as in dh8_instruments
-    dh8_ports = {1,2,3,4}; 
+   % dh8_ports = {1,2,6,7}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
-    dh8_serialnumber = {227, 1173, 1426,[]};
+  %  dh8_serialnumber = {227, 1173, 1426,[]};
 elseif strcmp(UWAY_WAP_SUBDIR, "With_AC9/") == 1 % tjor: selects subdirectory with AC9
-    dh8_instruments = {"acs", "bb3", "ac9", "ctd"};
+    %dh8_instruments = {"acs", "bb3", "ac9", "ctd"};
     % Ports must corresponds to same ports as in dh8_instruments
-    dh8_ports = {1,2,3,4}; 
+    %dh8_ports = {1,2,6,7}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
-    dh8_serialnumber = {122, 1173, 227,[]};
+    %dh8_serialnumber = {122, 1173, 227,[]};
 elseif strcmp(UWAY_WAP_SUBDIR, "/") == 1 % tjor: this is the `default" config (i.e. without subdirectories inside WAP_extracted)
-    dh8_instruments = {"ctd", "acs", "cstar", "bb3"};
+    dh8_instruments = {"bb3", "ctd", "cstar", "acs"};
     % Ports must corresponds to same ports as in dh8_instruments
-    dh8_ports = {4,1,3,2}; 
+    dh8_ports = {1,2,6,7}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
-    dh8_serialnumber = {[], 122, 1426, 1173}; 
+    dh8_serialnumber = {1173, [],1426, 122}; 
 endif
 %-----------------------------
 
 %-----------------------------
 % Paths
-#MAIN_PATH = "/users/rsg/tjor/scratch_network/AMT_underway/AMT28/";
-#MAIN_PATH = "/data/abitibi1/scratch/scratch_disk/tjor/AMT_underway/AMT28/"; disp("\n\n-----------THIS IS FOR TOM----------\n\n"); fflush(stdout);
+#MAIN_PATH = "/users/rsg/tjor/scratch_network/AMT_underway/AMT27/";
 MAIN_PATH = "/data/abitibi1/scratch/scratch_disk/tjor/AMT_underway/AMT27/"; disp("\n\n-----------THIS IS FOR TOM----------\n\n"); fflush(stdout);
-% MAIN_PATH = "/tom/AMT_underway/AMT28/"; %disp("\n\n---------THIS IS FOR GIORGIO---------\n\n"); fflush(stdout);
-% MAIN_PATH = "/fast_scratch/AMT28/"; disp("\n\n---------THIS IS FOR GIORGIO---------\n\n"); fflush(stdout);
 % MAIN_PATH = [MAIN_PATH, "/Data/", CRUISE,"/"];     % Root directory for current AMT cruise
 PATH_DATA = [MAIN_PATH, "Data/"];        % Directory with all raw and wapped data
 PATH_SOURCE = [MAIN_PATH, "Source/"];% Directory with all source code
@@ -99,7 +96,7 @@ D_CAL_FILES = [PATH_DATA, UWAY_DIR, "Calibration_files/"];
 
 %-----------------------------
 % ACS calibration file
-ACS_CAL_FILE_NAME = "acs122_20180923.dev"; %tjor -remove hardcorded filename from get_acs_NoWL.m
+ACS_CAL_FILE_NAME = "acs122.dev"; %tjor -remove hardcorded filename from get_acs_NoWL.m (find file name by looking in Calibration_files directory)
 %-----------------------------
 
 
@@ -113,15 +110,15 @@ PATH_TS = [PATH_SHIP, "Compress/"]; % Directory with ship underway ctd
 # Input parameters for ship"s underway data
 # 
 # here we assume that the ship"s uway data are always stored in daily folders called YYYYDOY (e.g., 2018290) 
-DIR_GPS = PATH_TS;
-GLOB_GPS = "2018\*";
-FN_GPS = "seatex-gga.ACO";
-FNC_GPS = @rd_seatech_gga; # this function should be inside Source/Underway
+%DIR_GPS = PATH_TS;
+%GLOB_GPS = "2018\*";
+%FN_GPS = "seatex-gga.ACO";
+%FNC_GPS = @rd_seatech_gga; # this function should be inside Source/Underway
 
-DIR_METDATA = PATH_TS;
-GLOB_METDATA = "2018\*";
-FN_METDATA = "oceanlogger.ACO";
-FNC_METDATA = @rd_oceanloggerJCR; # this function should be inside Source/Underway
+%DIR_METDATA = PATH_TS;
+%GLOB_METDATA = "2018\*";
+%FN_METDATA = "oceanlogger.ACO";
+%FNC_METDATA = @rd_oceanloggerJCR; # this function should be inside Source/Underway
 
 #----------------------------
 
