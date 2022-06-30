@@ -18,44 +18,57 @@ WAP_ROOT = lower(CRUISE); % tjor: `root" part of WAP file
 % Date
 % Set date interval to be processed (format is "yyyymmdd")
 % (this will have to be changed each time the scripts are run)
-% first day of cruise = 20180925, jday=268: "With_AC9/"  
-% day of switch to default config = 20180927, jday=270: "/" 
-% day of ACS switch = 20181019, jday=292": "With_AC9_Without_ACS/"% end day 301
-% dates
-inidate = "20180925";
-enddate = "20181028";
-%inidate = "20181003";
-%enddate = "20181005";
+% for AMT 2017 there was the `default' config and 'with BB3' on the cruise. 
+% jday=267 (20170923) is first day of cruise  % first WAP hour = 015
+% jday=306 (20171103 is final day of cruise (default config '/' ends here) % final WAP hour = 2
+% jday=304 (20171030) has incomplete data
 
-% Hour of the day for which Wapped files are searched
-% (day is not processed if a file for the specified hour is not found)
-% Format is "0HH"
-WAPhour = "012"; % tjor: `processes all days with 0XXth hour of data present"
 
-% Underway subdirectory where to find special wapped data
-% Leave with simple / if no special case
-%UWAY_WAP_SUBDIR = "With_AC9_Without_ACS/"; 
-%UWAY_WAP_SUBDIR = "With_AC9/"; 
-UWAY_WAP_SUBDIR = "/"; 
+% Sett subdirectories, ini/end dates and WAPhours.
+
+% Step 1: `default' run 1 ` 
+UWAY_WAP_SUBDIR = "/"; % Leave with simple / if no special case
+%inidate = "20170923"; % jday=267 or 20170923 is first day of cruise  % first WAP hour = 015, final WAP hour = 002.
+inidate = "20171030"; %
+enddate = "20171102"; % jday=306 or 20171103 is final day of cruise (default config '/' ends here) % final WAP hour = 2
+WAPhour = "015"; % tjor: `processes all days with 0XXth hour of data present" 
+
+% Step 1: `default' run 2
+%UWAY_WAP_SUBDIR = "/"; % Leave with simple / if no special case 
+%inidate = "20170923"; % jday=306 or 20171103 is first day of cruise (default config '/' ends here) % final WAP hour = 2
+%enddate = "20170926"; % jday=267 or 20171103 is final day of cruise  % first WAP hour = 015, final WAP hour = 002.
+%WAPhour = "020"; % tjor: `processes all days with 0XXth hour of data present" 
+
+% Step 1: `default' run 3
+UWAY_WAP_SUBDIR = "/"; % Le
+inidate = "20171030"; %
+enddate = "20171102"; % jday=306 or 20171103 is final day of cruise (default config '/' ends here) % final WAP hour = 2
+WAPhour = "023"; % tjor: `processes all days with 0XXth hour of data present" 
+
+% Step 1: run with BB3
+%UWAY_WAP_SUBDIR = "with_BB3/"; 
+%inidate = "20170926"; % jday=269  % WAP hours 006 - 009 need processing for ca%se "with_BB3/"
+%enddate = "20170926"; % jday=269  % used as buffer
+%WAPhour = "006"; % tjor: `processes all days with 0XXth hour of data present" 
 
 % Parameters specific for Underway plotting/processing
 % (this will change depending on specific section fo the cruise)
 % Setup to automatically change based on UWAY_WAP_SUBDIR
 %
 % Implemented instruments to selct from are 
-% {"ctd","acs","bb3","cstar","acs2","ac9","clam"}
-if strcmp (UWAY_WAP_SUBDIR, "With_AC9_Without_ACS/") == 1 % tjor: selects `bfiles" for 2018 cruise
- %   dh8_instruments = {"ac9", "bb3", "cstar", "ctd"};
+% {"ctd","acs","bb3","cstar","acs2","ac9","clam"}  % NOTE: AC9 not used in AMT27
+if strcmp (UWAY_WAP_SUBDIR, "With_AC9_Without_ACS/") == 1 % tjor: no special case in AMT27
+    %   dh8_instruments = {"ac9", "bb3", "cstar", "ctd"};
     % Ports must corresponds to same ports as in dh8_instruments
-   % dh8_ports = {1,2,6,7}; 
+    % dh8_ports = {1,2,6,7}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
-  %  dh8_serialnumber = {227, 1173, 1426,[]};
-elseif strcmp(UWAY_WAP_SUBDIR, "With_AC9/") == 1 % tjor: selects subdirectory with AC9
-    %dh8_instruments = {"acs", "bb3", "ac9", "ctd"};
+    %  dh8_serialnumber = {227, 1173, 1426,[]};
+elseif strcmp(UWAY_WAP_SUBDIR, "with_BB3/") == 1 % 
+    dh8_instruments = {"bb3", "ctd", "cstar", "acs"};
     % Ports must corresponds to same ports as in dh8_instruments
-    %dh8_ports = {1,2,6,7}; 
+    dh8_ports = {1,2,6,7}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
-    %dh8_serialnumber = {122, 1173, 227,[]};
+    dh8_serialnumber = {1173, [],1426, 122};
 elseif strcmp(UWAY_WAP_SUBDIR, "/") == 1 % tjor: this is the `default" config (i.e. without subdirectories inside WAP_extracted)
     dh8_instruments = {"bb3", "ctd", "cstar", "acs"};
     % Ports must corresponds to same ports as in dh8_instruments
@@ -67,7 +80,7 @@ endif
 
 %-----------------------------
 % Paths
-#MAIN_PATH = "/users/rsg/tjor/scratch_network/AMT_underway/AMT27/";
+# MAIN_PATH = "/users/rsg/tjor/scratch_network/AMT_underway/AMT27/";
 MAIN_PATH = "/data/abitibi1/scratch/scratch_disk/tjor/AMT_underway/AMT27/"; disp("\n\n-----------THIS IS FOR TOM----------\n\n"); fflush(stdout);
 % MAIN_PATH = [MAIN_PATH, "/Data/", CRUISE,"/"];     % Root directory for current AMT cruise
 PATH_DATA = [MAIN_PATH, "Data/"];        % Directory with all raw and wapped data
@@ -96,7 +109,7 @@ D_CAL_FILES = [PATH_DATA, UWAY_DIR, "Calibration_files/"];
 
 %-----------------------------
 % ACS calibration file
-ACS_CAL_FILE_NAME = "acs122.dev"; %tjor -remove hardcorded filename from get_acs_NoWL.m (find file name by looking in Calibration_files directory)
+ACS_CAL_FILE_NAME = "acs122.dev"; % tjor -find file name by looking in Calibration_files directory
 %-----------------------------
 
 

@@ -90,7 +90,7 @@ function step1par(jday)
                clam = bindata_new(strdate,10);
            otherwise
                error('Please add the proper case to have the instrument processed')
-               keyboard
+              % keyboard
        endswitch
    endfor
    % We assume that flow will always be there
@@ -192,7 +192,7 @@ function step1par(jday)
          WAPvars.flow_v = flow_v;
       catch
          disp('No flow data');
-         keyboard
+         %keyboard
       end_try_catch
 
     endfor
