@@ -24,32 +24,37 @@ WAP_ROOT = lower(CRUISE); % tjor: `root" part of WAP file
 % jday=304 (20171030) has incomplete data
 
 
-% Sett subdirectories, ini/end dates and WAPhours.
+% Set subdirectories, ini/end dates and WAPhours.
 
 % Step 1: `default' run 1 ` 
-UWAY_WAP_SUBDIR = "/"; % Leave with simple / if no special case
+%UWAY_WAP_SUBDIR = "/"; % Leave with simple / if no special case
 %inidate = "20170923"; % jday=267 or 20170923 is first day of cruise  % first WAP hour = 015, final WAP hour = 002.
-inidate = "20171030"; %
-enddate = "20171102"; % jday=306 or 20171103 is final day of cruise (default config '/' ends here) % final WAP hour = 2
-WAPhour = "015"; % tjor: `processes all days with 0XXth hour of data present" 
+%enddate = "20171102"; % jday=306 or 20171102 is final day of cruise (default config '/' ends here) % final WAP hour = 2
+%WAPhour = "015"; % tjor: `processes all days with 0XXth hour of data present" 
 
 % Step 1: `default' run 2
 %UWAY_WAP_SUBDIR = "/"; % Leave with simple / if no special case 
-%inidate = "20170923"; % jday=306 or 20171103 is first day of cruise (default config '/' ends here) % final WAP hour = 2
-%enddate = "20170926"; % jday=267 or 20171103 is final day of cruise  % first WAP hour = 015, final WAP hour = 002.
+%inidate = "20170924"; %  % handles missing WAP hours at start of cruise
+%enddate = "20170926"; % 
 %WAPhour = "020"; % tjor: `processes all days with 0XXth hour of data present" 
 
 % Step 1: `default' run 3
-UWAY_WAP_SUBDIR = "/"; % Le
-inidate = "20171030"; %
-enddate = "20171102"; % jday=306 or 20171103 is final day of cruise (default config '/' ends here) % final WAP hour = 2
-WAPhour = "023"; % tjor: `processes all days with 0XXth hour of data present" 
+%UWAY_WAP_SUBDIR = "/"; % 
+%inidate = "20171030"; % handles missing WAP hours at end of cruise
+%enddate = "20171102"; 
+%WAPhour = "023"; % tjor: `processes all days with 0XXth hour of data present" 
 
 % Step 1: run with BB3
 %UWAY_WAP_SUBDIR = "with_BB3/"; 
 %inidate = "20170926"; % jday=269  % WAP hours 006 - 009 need processing for ca%se "with_BB3/"
 %enddate = "20170926"; % jday=269  % used as buffer
 %WAPhour = "006"; % tjor: `processes all days with 0XXth hour of data present" 
+
+% Step 2:  
+UWAY_WAP_SUBDIR = "/"; % this is not used
+inidate = "20170924"; % jday=267 or 20170923 is first day of cruise  % first WAP hour = 015, final WAP hour = 002.
+enddate = "20170928"; % jday=306 or 20171102 is final day of cruise (default config '/' ends here) % final WAP hour = 2
+
 
 % Parameters specific for Underway plotting/processing
 % (this will change depending on specific section fo the cruise)
@@ -117,21 +122,21 @@ ACS_CAL_FILE_NAME = "acs122.dev"; % tjor -find file name by looking in Calibrati
 %-----------------------------
 % Ship"s system directories
 PATH_SHIP = [PATH_DATA, "Ship_uway/"]; %tjor - ships meteorological data
-PATH_TS = [PATH_SHIP, "Compress/"]; % Directory with ship underway ctd
+PATH_TS = [PATH_SHIP, "Compress/"]; % Directory with ship underway ctd % THIS IS NOT THERE FOR AMT27
 
 #----------------------------
 # Input parameters for ship"s underway data
 # 
 # here we assume that the ship"s uway data are always stored in daily folders called YYYYDOY (e.g., 2018290) 
-%DIR_GPS = PATH_TS;
-%GLOB_GPS = "2018\*";
-%FN_GPS = "seatex-gga.ACO";
-%FNC_GPS = @rd_seatech_gga; # this function should be inside Source/Underway
+DIR_GPS = PATH_TS; % THIS WILL NEED CHANGING FOR AMT27
+GLOB_GPS = "2017\*";
+FN_GPS = "seatex-gga.ACO";
+FNC_GPS = @rd_seatech_gga; # this function should be inside Source/Underway
 
-%DIR_METDATA = PATH_TS;
-%GLOB_METDATA = "2018\*";
-%FN_METDATA = "oceanlogger.ACO";
-%FNC_METDATA = @rd_oceanloggerJCR; # this function should be inside Source/Underway
+DIR_METDATA = PATH_TS; % THIS WILL NEED CHANGING FOR AMT27
+GLOB_METDATA = "2017\*";
+FN_METDATA = "oceanlogger.ACO";
+FNC_METDATA = @rd_oceanloggerJCR; # this function should be inside Source/Underway
 
 #----------------------------
 
