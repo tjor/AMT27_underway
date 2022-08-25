@@ -125,23 +125,27 @@ PATH_SHIP = [PATH_DATA, "Ship_uway/"]; %tjor - ships meteorological data
 % NOTE FOR WHEN RESUMING PROCESSING: AMT27  (onboard discovery) has ship data in a different format to AMT28%
 % Code from here to FNC_METDATA will need revising for different data format (SURF FILES)
 % It is possible that the function rd_oceanlogger(date_str) will need to replace rd_oceanlogger_discovery(date_str)
+%PATH_TS = [PATH_SHIP, "Compress/"]; % Directory with ship underway ctd - AMT28
 
 PATH_TS = [PATH_SHIP,'SURFMETV3/']; % copied from AMT27 Source code
 PATH_GPS = [PATH_SHIP,'GPS/'];  % copied from AMT27 Source code
-ship_uway_fname = '*Surf-DY-SM_DY1*'; %% copied from AMT27 Source code
+%ship_uway_fname = '*Surf-DY-SM_DY1*'; %% copied from AMT27 Source code
+
 #----------------------------
 # Input parameters for ship"s underway data
 # 
-# here we assume that the ship"s uway data are always stored in daily folders called YYYYDOY (e.g., 2018290) 
-DIR_GPS = PATH_TS; % THIS WILL NEED CHANGING FOR AMT27
-GLOB_GPS = "2017\*";
-FN_GPS = "seatex-gga.ACO";
-FNC_GPS = @rd_seatech_gga; # this function should be inside Source/Underway
+# here we assume that the ship"s uway data are always stored in daily folders called YYYYDOY (e.g., 2018290) - tjor - doesnt apply to dis 
+DIR_GPS = PATH_GPS; 
+GLOB_GPS = "2017\*"; # needs changing for AMT27
+FN_GPS = "seatex-gga.ACO";  # needs changing for AMT27
+FNC_GPS = @rd_seatech_gga_discovery; # this function should be inside Source/Underway
 
-DIR_METDATA = PATH_TS; % THIS WILL NEED CHANGING FOR AMT27
-GLOB_METDATA = "2017\*";
-FN_METDATA = "oceanlogger.ACO";
-FNC_METDATA = @rd_oceanloggerJCR; # this function should be inside Source/Underway
+
+
+DIR_METDATA = PATH_TS; % 
+GLOB_METDATA = "2017\*"; # needs changing for AMT27
+FN_METDATA = "oceanlogger.ACO"; # needs changing for AMT27
+FNC_METDATA = @rd_oceanlogger_discovery; # this function should be inside Source/Underway
 
 #----------------------------
 

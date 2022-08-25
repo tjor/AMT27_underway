@@ -5,7 +5,10 @@
    PLOT = 1;
 
    % Load paths and common variables
-   run("../input_parameters.m")
+   run("input_parameters.m")
+   %run("../input_parameters.m")
+   
+
    global OUT_PROC # this is for plot_spectra2.m
    global UWAY_DIR
 
@@ -13,12 +16,13 @@
    [numdates, strdates, vecdates, jday_in] = get_date_range(inidate,enddate);
 
    fn_saved = glob([DIR_STEP1 "*mat"]);
-
+   
    global YYYY = vecdates(1, 1); % Assumes all AMT days are within same year!! % used as processing Id
 
    % Change first day to process more than just last sampled day 
    first_day = find_index_strdate_in_glob(fn_saved, sprintf("%d", jday_in(1))); % follows from ini and end dates
    last_day = find_index_strdate_in_glob(fn_saved, sprintf("%d", jday_in(end)));
+
 
    % Need to overwrite array of jdays with dates from saved files
    for ifile = 1:length(fn_saved)
@@ -26,8 +30,6 @@
    endfor
 
    dailyfiles = dir(  [DIR_STEP1 "*mat"]  ); % redundancy with line 27? just different format
-
-
 
    %first_day = 1;   
    for iday = first_day:last_day

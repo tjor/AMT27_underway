@@ -1,7 +1,8 @@
 function step1par(jday)
 
    % Load paths and common variables
-   run('../input_parameters.m')
+   run('input_parameters.m') 
+  % run('../input_parameters.m')
 
    din = [PATH_DATA UWAY_DIR];
    wapdir = [din DATA_WAPPED UWAY_WAP_SUBDIR]
@@ -16,6 +17,7 @@ function step1par(jday)
    % Create date range
    [numdates, strdates, vecdates, jdays] = get_date_range(inidate,enddate);
    % Get strdates corresponding to jday
+ 
    strdate = strdates(jdays==jday,:);
 
    doy = sprintf('%d',jday);
