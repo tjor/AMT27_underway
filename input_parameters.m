@@ -125,8 +125,10 @@ PATH_SHIP = [PATH_DATA, "Ship_uway/"]; %tjor - ships meteorological data
 % NOTE FOR WHEN RESUMING PROCESSING: AMT27  (onboard discovery) has ship data in a different format to AMT28%
 % Code from here to FNC_METDATA will need revising for different data format (SURF FILES)
 % It is possible that the function rd_oceanlogger(date_str) will need to replace rd_oceanlogger_discovery(date_str)
-PATH_TS = [PATH_SHIP, "Compress/"]; % Directory with ship underway ctd % THIS IS NOT THERE FOR AMT27
 
+PATH_TS = [PATH_SHIP,'SURFMETV3/']; % copied from AMT27 Source code
+PATH_GPS = [PATH_SHIP,'GPS/'];  % copied from AMT27 Source code
+ship_uway_fname = '*Surf-DY-SM_DY1*'; %% copied from AMT27 Source code
 #----------------------------
 # Input parameters for ship"s underway data
 # 
