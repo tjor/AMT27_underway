@@ -1,10 +1,8 @@
-function tmp = rd_oceanlogger_discovery(fn)
+function tmp = rd_oceanlogger_discovery(fn_surf, fn_met, fn_light, fn_tsg)
     % Read meteo and TGS variables from SURF files
     pkg load netcdf 
     global ts_dir
-    % 1) Surf
-    
-    ncfiles = fn
+
     %basedir = ts_dir;
     %ncfiles = glob([basedir date_str '*Surf-DY-SM_DY1*']);
     % % There should be only one file returned by glob
@@ -16,8 +14,11 @@ function tmp = rd_oceanlogger_discovery(fn)
     % endif
     
     % Fix issues on AMT29 when system was restarted (two files present for same day)
+    
+    % 1) Surf
+    ncfiles = fn_surf
     for inc = 1:1
-        ncfile = ncfiles(inc);
+        ncfile = ncfiles;
         if inc == 1
             % Assumes time is in dats (matlab format)
             tmp.time = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);
@@ -40,7 +41,7 @@ function tmp = rd_oceanlogger_discovery(fn)
     endfor
 
     % 2) MET (same time as Surf)
-    ncfiles = glob([basedir date_str '*MET-DY-SM_DY1*']);
+    ncfiles = fn_met;
     % % There should be only one file returned by glob
     % if length(ncfiles)~=1
     %     disp('Something wrong with MET files')
@@ -48,9 +49,8 @@ function tmp = rd_oceanlogger_discovery(fn)
     % else
     %     ncfile = ncfiles{1};
     % endif
-
-    for inc = 1:length(ncfiles)
-        ncfile = ncfiles(inc);
+    for inc = 1:1
+        ncfile = ncfiles;
         if inc == 1
             % tmp2.time = nc{'time'}(:)+datenum([1899,12,30,0,0,0]);
             tmp.wind_vel = ncread(ncfile,'speed'); %WInd speed [m/s]    
@@ -66,7 +66,7 @@ function tmp = rd_oceanlogger_discovery(fn)
     endfor
     
     % 3) Light (same time as MET and Surf)
-    ncfiles = glob([basedir date_str '*Light-DY-SM_DY1*']);
+    ncfiles = fn_light;
     % % There should be only one file returned by glob
     % if length(ncfiles)~=1
     %     disp('Something wrong with Light files')
@@ -75,8 +75,8 @@ function tmp = rd_oceanlogger_discovery(fn)
     %     ncfile = ncfiles{1};
     % endif
 
-    for inc = 1:length(ncfiles)
-        ncfile = ncfiles(inc);
+    for inc = 1:1
+        ncfile = ncfiles;
         if inc == 1
             % tmp3.time = nc{'time'}(:)+datenum([1899,12,30,0,0,0]);
             tmp.baro = ncread(ncfile,'pres'); % Atmospheric pressure [mbar]
@@ -92,9 +92,10 @@ function tmp = rd_oceanlogger_discovery(fn)
            tmp.tir2 = [tmp.tir2; NaN; ncread(ncfile,'stir')];
         endif
     endfor
+    
 
     % 4) TSG (different time => need interpolation)
-    ncfiles = glob([basedir '../TSG/' date_str '*SBE45*']);
+    ncfiles = fn_tsg;
     % % There should be only one file returned by glob
     % if length(ncfiles)~=1
     %     disp('Something wrong with TSG files')
@@ -103,8 +104,8 @@ function tmp = rd_oceanlogger_discovery(fn)
     %     ncfile = ncfiles{1};
     % endif
     
-    for inc = 1:length(ncfiles)
-        ncfile = ncfiles(inc);
+    for inc = 1:1
+        ncfile = ncfiles;
         if inc == 1
             tmp2.time = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);
             tmp2.sal = ncread(ncfile,'salin'); % TSG salinity

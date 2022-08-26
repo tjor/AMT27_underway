@@ -49,7 +49,8 @@
                 DIR_GPS, FN_GPS, \
                 DIR_ATT, FN_ATT, \
                 DIR_DEPTH, FN_DEPTH,\
-                DIR_METDATA, FN_METDATA);
+                DIR_TS, FN_SURF, FN_METDATA, FN_LIGHT,\
+                DIR_TSG, FN_TSG);
                
        % uway = step2h_ships_underway_amt_make_processed(jdays(iday), \
         %        DIR_GPS, GLOB_GPS, FN_GPS, FNC_GPS, \

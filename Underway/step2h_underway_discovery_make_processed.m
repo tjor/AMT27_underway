@@ -1,4 +1,4 @@
-function step2h_underway_discovery_make_processed(doy, date_str, FUNC_GGA, DIR_GPS, FN_GPS, DIR_ATT, FN_ATT, DIR_DEPTH, FN_DEPTH, DIR_METDATA, FN_METDATA)
+function step2h_underway_discovery_make_processed(doy, date_str, FUNC_GGA, DIR_GPS, FN_GPS, DIR_ATT, FN_ATT, DIR_DEPTH, FN_DEPTH, DIR_TS, FN_SURF, FN_METDATA, FN_LIGHT, DIR_TSG, FN_TSG)
 
 
    # The aim of this function is to combine step2h_underway_make_processed (2022 version of processing file)
@@ -17,46 +17,32 @@ function step2h_underway_discovery_make_processed(doy, date_str, FUNC_GGA, DIR_G
    din_gps = glob([DIR_GPS date_str FN_GPS]); % used in GGA function
    din_att = glob([DIR_ATT date_str FN_ATT]);
    din_depth = glob([DIR_DEPTH date_str FN_DEPTH]); %  
-   din_met = glob([DIR_METDATA date_str FN_METDATA]); %
+   
+   din_surf = glob([DIR_TS date_str FN_SURF]); %
+   din_met = glob([DIR_TS date_str FN_METDATA]); %
+   din_light = glob([DIR_TS date_str FN_LIGHT]); %
+   din_tsg = glob([DIR_TSG date_str FN_TSG]); %
   
    disp(din_gps{1})
    disp(din_depth{1})
    disp(din_att{1})
   
+   disp(din_surf{1})
    disp(din_met{1})
-
-   % Get date and convert to jday
-  %  yr = str2num(cell2mat(din_anc)(:,end-39:end-36));
-  % mm = str2num(cell2mat(din_anc)(:,end-35:end-34));
-   %day = str2num(cell2mat(din_anc)(:,end-33:end-32));
-   %jday = jday(datenum([yr,mm,day]));
-   %jday_str = num2str(jday);
-
-   % tjor -  I think we can remove, as loop is now done outside function
-   % fn_saved = glob([din '*mat']);
-   % istart = find(str2num(jday_str) == str2num(strsplit(fn_saved{first_day}, '_.'){end-1}) );
-   % istop = find(str2num(jday_str) == str2num(strsplit(fn_saved{last_day}, '_.'){end-1}) );
+   disp(din_light{1})
+   disp(din_tsg{1})
 
    disp('Processing ship''s underway data...')
 
-   % tjor -  I think we can remove, as loop is now done outside function
-   %for idin = 1:length(din_anc)
-   %for idin = istart:istop
-    
+   % Load GPS files
+   tmp1 = rd_seatech_gga_discovery(din_gps{1}, din_att{1}, din_depth{1});
+   tmp2 = rd_oceanlogger_discovery(din_surf{1}, din_met{1}, din_light{1}, din_tsg{1});
   
-      fflush(stdout);
+   keyboard % note for resuming: this function needs to be cross-referenced with the AMT28 version (i.e. I think we need to copy the time
+   %interpolation from there over?)%
 
-      %if strcmp(din_anc{idin}, '../../data/Underway/saved/../../Ship_uway/ancillary/2016277')
-      %    keyboard
-      %end%if
-
-      % read ship's underway data
-      % Identify the date
-
-      % date_str = datestr(datenum([yr(1),mm(1),day(1)]),'yyyymmdd');
-
-      % Load GPS files
-       tmp1 = rd_seatech_gga_discovery(din_gps{1}, din_att{1}, din_depth{1});
+       
+       keyboard
      % tmp1 = FNC_GPS([din_gps{1} '/' FN_GPS]);
 
       %tmp1 = FNC_GPS([din_gps{1}])

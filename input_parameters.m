@@ -127,25 +127,40 @@ PATH_SHIP = [PATH_DATA, "Ship_uway/"]; %tjor - ships meteorological data
 % It is possible that the function rd_oceanlogger(date_str) will need to replace rd_oceanlogger_discovery(date_str)
 %PATH_TS = [PATH_SHIP, "Compress/"]; % Directory with ship underway ctd - AMT28
 
-PATH_TS = [PATH_SHIP,'SURFMETV3/']; % copied from AMT27 Source code
-PATH_GPS = [PATH_SHIP,'GPS/'];  % copied from AMT27 Source code
-%ship_uway_fname = '*Surf-DY-SM_DY1*'; %% copied from AMT27 Source code
+
+PATH_GPS = [PATH_SHIP,'GPS/'];  % 
+PATH_ATT = [PATH_SHIP,'ATT/'];  % 
+PATH_DEPTH = [PATH_SHIP,'EA600/'];  % 
+PATH_TS = [PATH_SHIP,'SURFMETV3/']; % 
+PATH_TSG = [PATH_SHIP,'TSG/']; %
 
 #----------------------------
 # Input parameters for ship"s underway data
-# 
-# here we assume that the ship"s uway data are always stored in daily folders called YYYYDOY (e.g., 2018290) - tjor - doesnt apply to dis 
+# Discovery we just specify the directories and filenames
+
+# paths for GGA function
+FUNC_GGA = @rd_seatech_gga_discovery; # not used explictly
+
 DIR_GPS = PATH_GPS; 
-GLOB_GPS = "2017\*"; # needs changing for AMT27
-FN_GPS = "seatex-gga.ACO";  # needs changing for AMT27
-FNC_GPS = @rd_seatech_gga_discovery; # this function should be inside Source/Underway
+FN_GPS =  '*position-Applanix_GPS*';
+
+DIR_ATT = PATH_ATT; 
+FN_ATT = '*shipattitude-Applanix_TSS*';
+
+DIR_DEPTH = PATH_DEPTH;
+FN_DEPTH = '*EA640_DY1*';
 
 
+# paths for Oceanlogger function
+FUNC_OL = @rd_oceanlogger_discovery; # not used explictly
 
-DIR_METDATA = PATH_TS; % 
-GLOB_METDATA = "2017\*"; # needs changing for AMT27
-FN_METDATA = "oceanlogger.ACO"; # needs changing for AMT27
-FNC_METDATA = @rd_oceanlogger_discovery; # this function should be inside Source/Underway
+DIR_TS = PATH_TS;  
+FN_SURF = '*Surf-DY-SM_DY1*';  
+FN_METDATA = '*MET-DY-SM_DY1*';  
+FN_LIGHT = '*Light-DY-SM_DY1*';
+
+DIR_TSG = PATH_TSG;  
+FN_TSG = '*SBE45*';
 
 #----------------------------
 
