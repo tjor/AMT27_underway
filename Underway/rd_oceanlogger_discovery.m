@@ -1,10 +1,12 @@
-function tmp = rd_oceanlogger_discovery(date_str)
+function tmp = rd_oceanlogger_discovery(fn)
     % Read meteo and TGS variables from SURF files
     pkg load netcdf 
     global ts_dir
     % 1) Surf
-    basedir = ts_dir;
-    ncfiles = glob([basedir date_str '*Surf-DY-SM_DY1*']);
+    
+    ncfiles = fn
+    %basedir = ts_dir;
+    %ncfiles = glob([basedir date_str '*Surf-DY-SM_DY1*']);
     % % There should be only one file returned by glob
     % if length(ncfiles)~=1
     %     disp('Something wrong with GPS files')
@@ -14,7 +16,7 @@ function tmp = rd_oceanlogger_discovery(date_str)
     % endif
     
     % Fix issues on AMT29 when system was restarted (two files present for same day)
-    for inc = 1:length(ncfiles)
+    for inc = 1:1
         ncfile = ncfiles(inc);
         if inc == 1
             % Assumes time is in dats (matlab format)

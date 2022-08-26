@@ -43,9 +43,17 @@
         % First process Ship ctd data
         % (needed by bb3 processing)
         disp("\nprocessing SHIPs UNDERWAY data...");  
-        uway = step2h_ships_underway_amt_make_processed(jdays(iday), \
-                DIR_GPS, GLOB_GPS, FN_GPS, FNC_GPS, \
-                DIR_METDATA, GLOB_METDATA, FN_METDATA, FNC_METDATA)  ;%
+
+        uway = step2h_underway_discovery_make_processed(jdays(iday), strdates(iday,:),\
+                FUNC_GGA, \
+                DIR_GPS, FN_GPS, \
+                DIR_ATT, FN_ATT, \
+                DIR_DEPTH, FN_DEPTH,\
+                DIR_METDATA, FN_METDATA);
+               
+       % uway = step2h_ships_underway_amt_make_processed(jdays(iday), \
+        %        DIR_GPS, GLOB_GPS, FN_GPS, FNC_GPS, \
+         %       DIR_METDATA, GLOB_METDATA, FN_METDATA, FNC_METDATA)  ;%
         disp("...done"); 
         
 

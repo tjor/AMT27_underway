@@ -1,10 +1,11 @@
-function tmp = rd_seatech_gga_discovery(date_str)
+function tmp = rd_seatech_gga_discovery(fn_gps, fn_att, fn_depth);
    % Read GPS variables from netcdf GPS file
    % date is used to identify the file
+   
    pkg load netcdf
    global gps_dir
 
-   ncfiles = glob([gps_dir, date_str '*position-Applanix_GPS*']);
+   %ncfiles = glob([gps_dir, date_str '*position-Applanix_GPS*']); % defunct
    % % There should be only one file returned by glob
    % if length(ncfiles)~=1
    %    disp('Something wrong with GPS files')
@@ -12,11 +13,14 @@ function tmp = rd_seatech_gga_discovery(date_str)
    % else
    %    ncfile = ncfiles{1};
    % end%if
-
+   %keyboard
+   
+   ncfiles = fn_gps
    % Fix issues on AMT29 when system was restarted (two files present for same day)
-   for inc = 1:length(ncfiles)
-       ncfile = ncfiles(inc);
+   for inc = 1:1 % note - this loops over one file 
+       ncfile = ncfiles
        if inc == 1
+        
            % Time must be first element of tmp!!!
            % (otherwise error in step2h_underway_amt27_make_processed.m)
            % Assumes time is in dats (matlab format)
@@ -40,10 +44,11 @@ function tmp = rd_seatech_gga_discovery(date_str)
        endif
    endfor
 
+
    % Read also ATT file with ship rolling pitchin and heaving
-   ncfiles = glob([gps_dir '../ATT/' date_str '*shipattitude-Applanix_TSS*']);
-   for inc = 1:length(ncfiles)
-       ncfile = ncfiles(inc);
+   ncfiles = fn_att;
+   for inc = 1:1
+       ncfile = ncfiles
        if inc == 1
            timeatt = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);
            tmp.roll = ncread(ncfile,'roll');
@@ -67,9 +72,9 @@ function tmp = rd_seatech_gga_discovery(date_str)
    tmp.heave = interp1(timeatt,tmp.heave,tmp.time);
 
    % Read DEPTH
-   ncfiles = glob([gps_dir '../EA600/' date_str '*EA600-EA640_DY1*']);
-   for inc = 1:length(ncfiles)
-       ncfile = ncfiles(inc);
+   ncfiles = fn_depth
+   for inc = 1:1
+       ncfile = ncfiles
        if inc == 1
            tt = ncread(ncfile,'time');
            timed = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);
