@@ -120,14 +120,8 @@ ACS_CAL_FILE_NAME = "acs122.dev"; % tjor -find file name by looking in Calibrati
 
 
 %-----------------------------
-% Ship"s system directories
+% Ship"s system directories - these are specfic to a Discovery cruise metadata (see AMT28 for JCR).
 PATH_SHIP = [PATH_DATA, "Ship_uway/"]; %tjor - ships meteorological data
-% NOTE FOR WHEN RESUMING PROCESSING: AMT27  (onboard discovery) has ship data in a different format to AMT28%
-% Code from here to FNC_METDATA will need revising for different data format (SURF FILES)
-% It is possible that the function rd_oceanlogger(date_str) will need to replace rd_oceanlogger_discovery(date_str)
-%PATH_TS = [PATH_SHIP, "Compress/"]; % Directory with ship underway ctd - AMT28
-
-
 PATH_GPS = [PATH_SHIP,'GPS/'];  % 
 PATH_ATT = [PATH_SHIP,'ATT/'];  % 
 PATH_DEPTH = [PATH_SHIP,'EA600/'];  % 
@@ -136,10 +130,9 @@ PATH_TSG = [PATH_SHIP,'TSG/']; %
 
 #----------------------------
 # Input parameters for ship"s underway data
-# Discovery we just specify the directories and filenames
 
-# paths for GGA function
-FUNC_GGA = @rd_seatech_gga_discovery; # not used explictly
+# file paths for GGA function
+FUNC_GGA = @rd_seatech_gga_discovery; # note: handle not used explictly for disco processing
 
 DIR_GPS = PATH_GPS; 
 FN_GPS =  '*position-Applanix_GPS*';
@@ -151,8 +144,8 @@ DIR_DEPTH = PATH_DEPTH;
 FN_DEPTH = '*EA640_DY1*';
 
 
-# paths for Oceanlogger function
-FUNC_OL = @rd_oceanlogger_discovery; # not used explictly
+# file paths for Oceanlogger function
+FUNC_OL = @rd_oceanlogger_discovery;  # note: handle not used explictly for disco processing
 
 DIR_TS = PATH_TS;  
 FN_SURF = '*Surf-DY-SM_DY1*';  

@@ -1,27 +1,21 @@
 function tmp = rd_oceanlogger_discovery(fn_surf, fn_met, fn_light, fn_tsg)
-    % Read meteo and TGS variables from SURF files
+    
+    # Function reads & combines meta data from 4 different files (surf, met, light, tsg) into a single stucture: tmp
+   
+    # This function was modfied by tjor (Aug 2022) - key changes:
+    # (i) function takes 4 separate filenames as input arguement
+    # (ii) internal loops removed (previously function acted on set of files for cruise). Note: loops just act on element 1,
+    # but keeps previous snytax to avoid any errors.
+    
+     
     pkg load netcdf 
-    global ts_dir
-
-    %basedir = ts_dir;
-    %ncfiles = glob([basedir date_str '*Surf-DY-SM_DY1*']);
-    % % There should be only one file returned by glob
-    % if length(ncfiles)~=1
-    %     disp('Something wrong with GPS files')
-    %     keyboard
-    % else
-    %     ncfile = ncfiles{1};
-    % endif
     
-    % Fix issues on AMT29 when system was restarted (two files present for same day)
-    
-    % 1) Surf
-    ncfiles = fn_surf
-    for inc = 1:1
-        ncfile = ncfiles;
+    % 1) surf
+    for inc = 1:1 % loop acts on element 1: 
+        ncfile = fn_surf; # temporary variable
         if inc == 1
             % Assumes time is in dats (matlab format)
-            tmp.time = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);
+            tmp.time = ncread(ncfile,'time') + datenum([1899,12,30,0,0,0]);
             tmp.flowrate = ncread(ncfile,'flow2'); % Instrument Flow Rate [l/mn]
             tmp.fluo = ncread(ncfile,'fluo'); % Fluorescence [V]
             tmp.trans = ncread(ncfile,'trans'); % Transmissibility [V]
@@ -40,17 +34,9 @@ function tmp = rd_oceanlogger_discovery(fn_surf, fn_met, fn_light, fn_tsg)
         endif
     endfor
 
-    % 2) MET (same time as Surf)
-    ncfiles = fn_met;
-    % % There should be only one file returned by glob
-    % if length(ncfiles)~=1
-    %     disp('Something wrong with MET files')
-    %     keyboard
-    % else
-    %     ncfile = ncfiles{1};
-    % endif
+    % 2) met
     for inc = 1:1
-        ncfile = ncfiles;
+        ncfile = fn_met; # temporary variable
         if inc == 1
             % tmp2.time = nc{'time'}(:)+datenum([1899,12,30,0,0,0]);
             tmp.wind_vel = ncread(ncfile,'speed'); %WInd speed [m/s]    
@@ -65,18 +51,9 @@ function tmp = rd_oceanlogger_discovery(fn_surf, fn_met, fn_light, fn_tsg)
         endif
     endfor
     
-    % 3) Light (same time as MET and Surf)
-    ncfiles = fn_light;
-    % % There should be only one file returned by glob
-    % if length(ncfiles)~=1
-    %     disp('Something wrong with Light files')
-    %     keyboard
-    % else
-    %     ncfile = ncfiles{1};
-    % endif
-
+    % 3) Light 
     for inc = 1:1
-        ncfile = ncfiles;
+        ncfile = fn_light; # temporary variable
         if inc == 1
             % tmp3.time = nc{'time'}(:)+datenum([1899,12,30,0,0,0]);
             tmp.baro = ncread(ncfile,'pres'); % Atmospheric pressure [mbar]
@@ -94,18 +71,9 @@ function tmp = rd_oceanlogger_discovery(fn_surf, fn_met, fn_light, fn_tsg)
     endfor
     
 
-    % 4) TSG (different time => need interpolation)
-    ncfiles = fn_tsg;
-    % % There should be only one file returned by glob
-    % if length(ncfiles)~=1
-    %     disp('Something wrong with TSG files')
-    %     keyboard
-    % else
-    %     ncfile = ncfiles{1};
-    % endif
-    
+    % 4) TSG (different time => need interpolation) 
     for inc = 1:1
-        ncfile = ncfiles;
+        ncfile = fn_tsg;  
         if inc == 1
             tmp2.time = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);
             tmp2.sal = ncread(ncfile,'salin'); % TSG salinity
@@ -130,7 +98,7 @@ function tmp = rd_oceanlogger_discovery(fn_surf, fn_met, fn_light, fn_tsg)
     tmp.thermosalinograph_temp = interp1(tmp2.time,tmp2.thermosalinograph_temp,tmp.time);
     tmp.conductivity = interp1(tmp2.time,tmp2.conductivity,tmp.time);
 
-    %tmp.chl = d(:,24); % [ug/l]
+    %tmp.chl = d(:,24); % [ug/l]  ? tjor: optional variables? keep for now!
     %tmp.sample_temp = d(:,25); % [degC]
     %
     %tmp.field28th = d(:,28);

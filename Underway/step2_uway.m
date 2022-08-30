@@ -29,7 +29,7 @@
        jdays(ifile) = str2num(strsplit(fn_saved{ifile}, "."){1}(end-2:end)); % creates jday array-define
    endfor
 
-   dailyfiles = dir(  [DIR_STEP1 "*mat"]  ); % redundancy with line 27? just different format
+   dailyfiles = dir(  [DIR_STEP1 "*mat"]  ); % redundancy with line 27? (just different format)
 
    %first_day = 1;   
    for iday = first_day:last_day
@@ -43,15 +43,17 @@
         % First process Ship ctd data
         % (needed by bb3 processing)
         disp("\nprocessing SHIPs UNDERWAY data...");  
-
-        uway = step2h_underway_discovery_make_processed(jdays(iday), strdates(iday,:),\
+	
+	% Discovery version of underway function (e.g. AMT27)
+        uway = step2h_underway_discovery_make_processed(strdates(iday,:),\
                 FUNC_GGA, \
                 DIR_GPS, FN_GPS, \
                 DIR_ATT, FN_ATT, \
                 DIR_DEPTH, FN_DEPTH,\
                 DIR_TS, FN_SURF, FN_METDATA, FN_LIGHT,\
                 DIR_TSG, FN_TSG);
-               
+         
+       %  JCR version of underway function (e.g. AMT28)     
        % uway = step2h_ships_underway_amt_make_processed(jdays(iday), \
         %        DIR_GPS, GLOB_GPS, FN_GPS, FNC_GPS, \
          %       DIR_METDATA, GLOB_METDATA, FN_METDATA, FNC_METDATA)  ;%

@@ -1,24 +1,17 @@
 function tmp = rd_seatech_gga_discovery(fn_gps, fn_att, fn_depth);
-   % Read GPS variables from netcdf GPS file
-   % date is used to identify the file
-   
+   # Function reads & combines meta data from 3 different files (gps, att, depth) into a single stucture: tmp
+ 
+   # This function was modfied by tjor (Aug 2022) - key changes:
+   # (i) function takes 3 separate filenames as input arguement
+   # (ii) internal loops removed (previously function acted on set of files for cruise). Note: loops just act on element 1,
+   # but keeps previous snytax to avoid any errors.
+    
+    
    pkg load netcdf
-   global gps_dir
-
-   %ncfiles = glob([gps_dir, date_str '*position-Applanix_GPS*']); % defunct
-   % % There should be only one file returned by glob
-   % if length(ncfiles)~=1
-   %    disp('Something wrong with GPS files')
-   %    keyboard
-   % else
-   %    ncfile = ncfiles{1};
-   % end%if
-   %keyboard
-   
-   ncfiles = fn_gps
-   % Fix issues on AMT29 when system was restarted (two files present for same day)
+ 
+   # 1) gps
    for inc = 1:1 % note - this loops over one file 
-       ncfile = ncfiles
+       ncfile = fn_gps;
        if inc == 1
         
            % Time must be first element of tmp!!!
@@ -45,10 +38,9 @@ function tmp = rd_seatech_gga_discovery(fn_gps, fn_att, fn_depth);
    endfor
 
 
-   % Read also ATT file with ship rolling pitchin and heaving
-   ncfiles = fn_att;
+   # 2) att 
    for inc = 1:1
-       ncfile = ncfiles
+       ncfile = fn_att;
        if inc == 1
            timeatt = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);
            tmp.roll = ncread(ncfile,'roll');
@@ -71,10 +63,9 @@ function tmp = rd_seatech_gga_discovery(fn_gps, fn_att, fn_depth);
    tmp.pitch = interp1(timeatt,tmp.pitch,tmp.time);
    tmp.heave = interp1(timeatt,tmp.heave,tmp.time);
 
-   % Read DEPTH
-   ncfiles = fn_depth
+   # 3) depth
    for inc = 1:1
-       ncfile = ncfiles
+       ncfile = fn_depth
        if inc == 1
            tt = ncread(ncfile,'time');
            timed = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);
@@ -94,7 +85,7 @@ function tmp = rd_seatech_gga_discovery(fn_gps, fn_att, fn_depth);
    tmp.depthm = interp1(timed(igood),tmp.depthm(igood),tmp.time);
 
 
-   %    % this is to deal with change in format through the cruise
+   %    % this is to deal with change in format through the cruise ?? tjor: maybe check with GrG?
    %    if length(tmp.time==1)
    %
    %        fmt = "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,,\n";

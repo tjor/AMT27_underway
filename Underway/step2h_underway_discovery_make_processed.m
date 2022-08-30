@@ -1,42 +1,41 @@
-function step2h_underway_discovery_make_processed(doy, date_str, FUNC_GGA, DIR_GPS, FN_GPS, DIR_ATT, FN_ATT, DIR_DEPTH, FN_DEPTH, DIR_TS, FN_SURF, FN_METDATA, FN_LIGHT, DIR_TSG, FN_TSG)
+function step2h_underway_discovery_make_processed(date_str, FUNC_GGA, DIR_GPS, FN_GPS, DIR_ATT, FN_ATT, DIR_DEPTH, FN_DEPTH, DIR_TS, FN_SURF, FN_METDATA, FN_LIGHT, DIR_TSG, FN_TSG)
 
 
-   # The aim of this function is to combine step2h_underway_make_processed (2022 version of processing file)
-   # with combine step2h_underway_make_processed
+   # This function combines `step2h_underway_make_processed.m' (2022 version of underway processing file, 
+   # which acts on a single day at a time) with `step2h_underway_amt27_makeprocessed.m'(version which contains 
+   # file reading syntax & functions for the discovery)
    
-   # likely mods:
+   # date_str = YYYYMMDD format. All other inputs are specified in inputparamters.m, and remove previous hardcoding within the metadata  read functions.
 
    % Global variables from step2
    global din
    global proc_dir
    global YYYY
 
-   % din_anc = glob([din '../../Ship_uway/ancillary/' num2str(YYYY) '*']);
-   % Get total files saved (uses Surfmetv3; GPS and TSG will have same number of files)
+   % Filenames for meta data
+   fn_gps = glob([DIR_GPS date_str FN_GPS]); % used in gga function
+   fn_att = glob([DIR_ATT date_str FN_ATT]);
+   fn_depth = glob([DIR_DEPTH date_str FN_DEPTH]); %  
    
-   din_gps = glob([DIR_GPS date_str FN_GPS]); % used in GGA function
-   din_att = glob([DIR_ATT date_str FN_ATT]);
-   din_depth = glob([DIR_DEPTH date_str FN_DEPTH]); %  
-   
-   din_surf = glob([DIR_TS date_str FN_SURF]); %
-   din_met = glob([DIR_TS date_str FN_METDATA]); %
-   din_light = glob([DIR_TS date_str FN_LIGHT]); %
-   din_tsg = glob([DIR_TSG date_str FN_TSG]); %
+   fn_surf = glob([DIR_TS date_str FN_SURF]); % used in oceanlogger function
+   fn_met = glob([DIR_TS date_str FN_METDATA]); %
+   fn_light = glob([DIR_TS date_str FN_LIGHT]); %
+   fn_tsg = glob([DIR_TSG date_str FN_TSG]); %
   
-   disp(din_gps{1})
-   disp(din_depth{1})
-   disp(din_att{1})
+   disp(fn_gps{1})
+   disp(fn_depth{1})
+   disp(fn_att{1})
   
-   disp(din_surf{1})
-   disp(din_met{1})
-   disp(din_light{1})
-   disp(din_tsg{1})
+   disp(fn_surf{1})
+   disp(fn_met{1})
+   disp(fn_light{1})
+   disp(fn_tsg{1})
 
    disp('Processing ship''s underway data...')
 
-   % Load GPS files
-   tmp1 = rd_seatech_gga_discovery(din_gps{1}, din_att{1}, din_depth{1});
-   tmp2 = rd_oceanlogger_discovery(din_surf{1}, din_met{1}, din_light{1}, din_tsg{1});
+   % load meta data and gps files - files are passed as arguments
+   tmp1 = rd_seatech_gga_discovery(fn_gps{1}, fn_att{1}, fn_depth{1});
+   tmp2 = rd_oceanlogger_discovery(fn_surf{1}, fn_met{1}, fn_light{1}, fn_tsg{1});
   
    keyboard % note for resuming: this function needs to be cross-referenced with the AMT28 version (i.e. I think we need to copy the time
    %interpolation from there over?)%
