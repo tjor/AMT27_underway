@@ -10,7 +10,10 @@ global FN_ROOT_STEP2
      yymmddHHMMDD(:,3) = onemin*[0:1:1440-1]'; # assign to day-column the minute intervals
 
      tmp_time = datenum( ones(1440,1)*[0 0 0 0 0 0] + yymmddHHMMDD) + doy  -1   ; # compute julian day for current date (jdays(iday))
-datevec(tmp_time(1))
+datevec(tmp_time(1)); % tjor - this was not the true date for AMT 27 - no knock on effects though (just used to initialize)
+
+% tmp_time = datenum( ones(1440,1)*[0 0 0 0 0 0] + yymmddHHMMDD) + doy  +1   ; this is actually the correct date,
+
      acs.time = tmp_time; # assign time vector to acs structure of this day
 
      # fill the rest of the acs structure with NaNs

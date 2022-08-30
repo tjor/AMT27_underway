@@ -14,10 +14,10 @@ function tmp = step2h_ships_underway_amt_make_processed(doy, DIR_GPS, GLOB_GPS, 
    global DIR_STEP1
    global FN_ROOT_STEP2
 
-   keyboard
+
    % Get total files saved (uses Surfmetv3; GPS and TSG will have same number of files)
    
-   din_gps = glob([DIR_GPS GLOB_GPS num2str(doy)]);
+   din_gps = glob([DIR_GPS GLOB_GPS num2str(doy)]); %AMT 28
    if length(din_gps)>1
       disp('found more than one file');
       keyboard()

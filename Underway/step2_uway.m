@@ -23,7 +23,6 @@
    first_day = find_index_strdate_in_glob(fn_saved, sprintf("%d", jday_in(1))); % follows from ini and end dates
    last_day = find_index_strdate_in_glob(fn_saved, sprintf("%d", jday_in(end)));
 
-
    % Need to overwrite array of jdays with dates from saved files
    for ifile = 1:length(fn_saved)
        jdays(ifile) = str2num(strsplit(fn_saved{ifile}, "."){1}(end-2:end)); % creates jday array-define
@@ -36,6 +35,8 @@
        
         disp(["\n---------" dailyfiles(iday).name "--------\n"] )
         fflush(stdout);
+
+
 
        # initialize output structure with nans
            ini_out(dailyfiles(iday).name, jdays(iday));
@@ -60,8 +61,9 @@
          %       DIR_METDATA, GLOB_METDATA, FN_METDATA, FNC_METDATA)  ;%
         disp("...done"); 
         
-	keyboard
+
         jday_str = dailyfiles(iday).name(end-6:end-4);
+
 
         % Load WAPvars from step1 output file
         load([DIR_STEP1 dailyfiles(iday).name]);
@@ -71,7 +73,6 @@
         disp("processing Flow data...");  
         flow = step2f_flow_make_processed(WAPvars.flow, dailyfiles(iday));
         disp("...done"); 
-
 
         % Cycle through the variables within WAPvars
         instruments = fieldnames(WAPvars);
@@ -85,7 +86,7 @@
 
                case "acs"
                    step2a_acs_amt_make_processed(WAPvars.acs, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs");
-       
+
                case "acs2"
                    step2a_acs_amt_make_processed(WAPvars.acs2, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs2"); % tjor: was not tested for acs2 on AMT 28
        

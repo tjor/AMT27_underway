@@ -15,21 +15,23 @@ WAP_ROOT = lower(CRUISE); % tjor: `root" part of WAP file
 %-----------------------------
 % Variables to be changed during cruise according to specific setups and user needs
 %
-% Date
+% Dates
+
 % Set date interval to be processed (format is "yyyymmdd")
 % (this will have to be changed each time the scripts are run)
-% for AMT 2017 there was the `default' config and 'with BB3' on the cruise. 
-% jday=267 (20170923) is first day of cruise  % first WAP hour = 015
-% jday=306 (20171103 is final day of cruise (default config '/' ends here) % final WAP hour = 2
-% jday=304 (20171030) has incomplete data
+% for AMT 2017 there was just the `default' config (same as `case with BB3').
 
+% jday=267 (20170924) is first day of cruise  % first WAP hour = 015
+% jday=305 (20171101 is final day of cruise (default config '/' ends here) % final WAP hour = 2
+% jday=304 (20171030) has incomplete data
+% jday=306 does not have MRG files (although some are present)
 
 % Set subdirectories, ini/end dates and WAPhours.
 
-% Step 1: `default' run 1 ` 
+% Step 1: `default' run 1 `  - 
 %UWAY_WAP_SUBDIR = "/"; % Leave with simple / if no special case
-%inidate = "20170923"; % jday=267 or 20170923 is first day of cruise  % first WAP hour = 015, final WAP hour = 002.
-%enddate = "20171102"; % jday=306 or 20171102 is final day of cruise (default config '/' ends here) % final WAP hour = 2
+%inidate = "20170924"; % jday=267 or 20170923 is first day of cruise  % first WAP hour = 015, final WAP hour = 002.
+%enddate = "20171101"; % jday=305 or 20171101 is final day of cruise (default config '/' ends here) % final WAP hour = 
 %WAPhour = "015"; % tjor: `processes all days with 0XXth hour of data present" 
 
 % Step 1: `default' run 2
@@ -40,20 +42,19 @@ WAP_ROOT = lower(CRUISE); % tjor: `root" part of WAP file
 
 % Step 1: `default' run 3
 %UWAY_WAP_SUBDIR = "/"; % 
-%inidate = "20171030"; % handles missing WAP hours at end of cruise
-%enddate = "20171102"; 
-%WAPhour = "023"; % tjor: `processes all days with 0XXth hour of data present" 
+%inidate = "20171101"; % handles missing WAP hours at end of cruise
+%WAPhour = "012"; % tjor: `processes all days with 0XXth hour of data present" 
 
 % Step 1: run with BB3
 %UWAY_WAP_SUBDIR = "with_BB3/"; 
-%inidate = "20170926"; % jday=269  % WAP hours 006 - 009 need processing for ca%se "with_BB3/"
+%inidate = "20170926"; % jday=269  % WAP hours 006 - 009 need processing for case "with_BB3/"
 %enddate = "20170926"; % jday=269  % used as buffer
 %WAPhour = "006"; % tjor: `processes all days with 0XXth hour of data present" 
 
 % Step 2:  
 UWAY_WAP_SUBDIR = "/"; % this is not used
 inidate = "20170924"; % jday=267 or 20170923 is first day of cruise  % first WAP hour = 015, final WAP hour = 002.
-enddate = "20170928"; % jday=306 or 20171102 is final day of cruise (default config '/' ends here) % final WAP hour = 2
+enddate = "20171101"; % jday=304 or 20171102 is final day of cruise (default config '/' ends here) % final WAP hour = 
 
 
 % Parameters specific for Underway plotting/processing
@@ -114,13 +115,13 @@ D_CAL_FILES = [PATH_DATA, UWAY_DIR, "Calibration_files/"];
 
 %-----------------------------
 % ACS calibration file
-ACS_CAL_FILE_NAME = "acs122.dev"; % tjor -find file name by looking in Calibration_files directory
+ACS_CAL_FILE_NAME = "acs122.dev"; % tjor -find file name by looking in Calibration_files directory - tjor: 30/08/20202 - can confirm this was used on AMT27 aswell as AMT28!
 %-----------------------------
 
 
 
 %-----------------------------
-% Ship"s system directories - these are specfic to a Discovery cruise metadata (see AMT28 for JCR).
+% Ship"s system directories - these are specfic to a discovery cruise metadata (see AMT28 for JCR).
 PATH_SHIP = [PATH_DATA, "Ship_uway/"]; %tjor - ships meteorological data
 PATH_GPS = [PATH_SHIP,'GPS/'];  % 
 PATH_ATT = [PATH_SHIP,'ATT/'];  % 
@@ -156,6 +157,7 @@ DIR_TSG = PATH_TSG;
 FN_TSG = '*SBE45*';
 
 #----------------------------
+
 
 
 # Path-related variables for step2

@@ -2,7 +2,8 @@
 clear all
 %pkg load time
 
-run('../input_parameters.m')
+%run('../input_parameters.m')
+run('input_parameters.m')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COMMENTED 2019 10 23 FN
@@ -281,9 +282,10 @@ endfor
 amt_optics.bb3.bbp_corr = amt_optics.bb3.bbp - amt_optics.bb3.bb02;
 
 
-# scale ac9 chl to acs chl
-run("cmp_chlACs2AC9_ratio");
-
+# scale ac9 chl to acs chl 
+if sum(~isnan(amt_optics.ac9.chl)) == 1 % test if AC9 data is present
+	run("cmp_chlACs2AC9_ratio");
+endif
 
 % keyboard
 eval([lower(CRUISE) '= amt_optics;']) # create amtXX structure
