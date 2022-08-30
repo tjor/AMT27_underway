@@ -45,7 +45,8 @@
         disp("\nprocessing SHIPs UNDERWAY data...");  
 	
 	% Discovery version of underway function (e.g. AMT27)
-        uway = step2h_underway_discovery_make_processed(strdates(iday,:),\
+
+        uway = step2h_underway_discovery_make_processed(jdays(iday), strdates(iday,:),\
                 FUNC_GGA, \
                 DIR_GPS, FN_GPS, \
                 DIR_ATT, FN_ATT, \
@@ -59,7 +60,7 @@
          %       DIR_METDATA, GLOB_METDATA, FN_METDATA, FNC_METDATA)  ;%
         disp("...done"); 
         
-
+	keyboard
         jday_str = dailyfiles(iday).name(end-6:end-4);
 
         % Load WAPvars from step1 output file

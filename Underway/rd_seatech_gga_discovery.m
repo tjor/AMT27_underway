@@ -65,7 +65,7 @@ function tmp = rd_seatech_gga_discovery(fn_gps, fn_att, fn_depth);
 
    # 3) depth
    for inc = 1:1
-       ncfile = fn_depth
+       ncfile = fn_depth;
        if inc == 1
            tt = ncread(ncfile,'time');
            timed = ncread(ncfile,'time')+datenum([1899,12,30,0,0,0]);

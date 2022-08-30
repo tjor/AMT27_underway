@@ -1,16 +1,20 @@
-function step2h_underway_discovery_make_processed(date_str, FUNC_GGA, DIR_GPS, FN_GPS, DIR_ATT, FN_ATT, DIR_DEPTH, FN_DEPTH, DIR_TS, FN_SURF, FN_METDATA, FN_LIGHT, DIR_TSG, FN_TSG)
+function tmp = step2h_underway_discovery_make_processed(doy, date_str, FUNC_GGA, DIR_GPS, FN_GPS, DIR_ATT, FN_ATT, DIR_DEPTH, FN_DEPTH, DIR_TS, FN_SURF, FN_METDATA, FN_LIGHT, DIR_TSG, FN_TSG)
 
 
-   # This function combines `step2h_underway_make_processed.m' (2022 version of underway processing file, 
+   # This function was developed by tjor in August 2022, so that discovery underway metadata could be read/processed in a simlar way to 
+   # JCR data for back-processing. 
+   
+   # The function combines `step2h_underway_make_processed.m' (2022 version of underway processing file, 
    # which acts on a single day at a time) with `step2h_underway_amt27_makeprocessed.m'(version which contains 
    # file reading syntax & functions for the discovery)
    
-   # date_str = YYYYMMDD format. All other inputs are specified in inputparamters.m, and remove previous hardcoding within the metadata  read functions.
+   # INPUTS:  doy = julian day and date_str = YYYYMMDD format. All other inputs are specified in inputparamters.m, and 
+   # remove previous hardcoding within the discovery rd functions.
 
    % Global variables from step2
-   global din
-   global proc_dir
    global YYYY
+   global DIR_STEP1
+   global FN_ROOT_STEP2
 
    % Filenames for meta data
    fn_gps = glob([DIR_GPS date_str FN_GPS]); % used in gga function
@@ -37,54 +41,34 @@ function step2h_underway_discovery_make_processed(date_str, FUNC_GGA, DIR_GPS, F
    tmp1 = rd_seatech_gga_discovery(fn_gps{1}, fn_att{1}, fn_depth{1});
    tmp2 = rd_oceanlogger_discovery(fn_surf{1}, fn_met{1}, fn_light{1}, fn_tsg{1});
   
-   keyboard % note for resuming: this function needs to be cross-referenced with the AMT28 version (i.e. I think we need to copy the time
-   %interpolation from there over?)%
+   % create daily time vector with one record per minute of the day (24*60=1440) - note: lines 40- 
+   tmp.time = y0(YYYY)-1 + doy + [0:1440-1]'/1440; # time vector to match 1-min binned optics data 
 
-       
-       keyboard
-     % tmp1 = FNC_GPS([din_gps{1} '/' FN_GPS]);
-
-      %tmp1 = FNC_GPS([din_gps{1}])
-      %keyboard
-      %tmp2 = FNC_METDATA([din_met{1} '/' FN_METDATA]);
-      %tmp1 = rd_seatech_gga_discovery(date_str);
-      keyboard
-      %tmp1 = rd_seatech_gga([din_anc{idin} '/seatex-gga.ACO']);
-     % tmp2 = rd_oceanlogger_discovery(date_str);
-      %tmp2 = rd_oceanloggerJCR([din_anc{idin} '/oceanlogger.ACO']);
-
-      tmp.time = y0(yr(idin))-1+jday(idin)+[0:1440-1]'/1440; % create daily time vector with one record per minute of the day (24*60=1440)
-
-      %interpolate underway data to one-minute samples
-      flds1 = fieldnames(tmp1);
-      for ifld1=2:length(flds1) % skips time field
+   %interpolate underway data to one-minute samples (and combine in single data structure)
+    flds1 = fieldnames(tmp1);
+    for ifld1=2:length(flds1) % skips time field
          tmp.(flds1{ifld1}) = nan(size(tmp.time));
          if ~isempty(tmp1.time)
             tmp.(flds1{ifld1}) = interp1(tmp1.time, tmp1.(flds1{ifld1}), tmp.time);
-         end%if
-      end%for
+         endif
+    endfor
 
-      flds2 = fieldnames(tmp2);
-      for ifld2=2:length(flds2) % skips time field
+    flds2 = fieldnames(tmp2);
+    for ifld2=2:length(flds2) % skips time field
          tmp.(flds2{ifld2}) = nan(size(tmp.time));
          if ~isempty(tmp2.time)
             tmp.(flds2{ifld2}) = interp1(tmp2.time, tmp2.(flds2{ifld2}), tmp.time);
-         end%if
-      end%for
-
-      % save underway ship's data to optics file
-      savefile = [proc_dir,'proc_optics_amt27_' jday_str(idin,:) '.mat'];
-      if (exist(savefile))
+         endif
+    endfor
+      
+    % save underway ship's data to optics file
+    savefile = [FN_ROOT_STEP2 num2str(doy) '.mat'];
+    if (exist(savefile))
          load(savefile);
-      end%if
+    endif
 
-      out.uway = tmp;
+    out.uway = tmp;
+    save('-v6', savefile , 'out' );
 
-      save('-v6', savefile , 'out' );
 
-   %end%for
-
-   disp('...done')
-   disp(' ')
-
-   endfunction
+endfunction
