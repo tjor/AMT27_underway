@@ -41,18 +41,20 @@ function tmp = step2h_underway_discovery_make_processed(doy, date_str, FUNC_GGA,
    tmp1 = rd_seatech_gga_discovery(fn_gps{1}, fn_att{1}, fn_depth{1});
    tmp2 = rd_oceanlogger_discovery(fn_surf{1}, fn_met{1}, fn_light{1}, fn_tsg{1});
   
+
    % create daily time vector with one record per minute of the day (24*60=1440) - note: lines 40- 
    tmp.time = y0(YYYY)-1 + doy + [0:1440-1]'/1440; # time vector to match 1-min binned optics data 
 
-   %interpolate underway data to one-minute samples (and combine in single data structure)
+
+    %interpolate underway data to one-minute samples (and combine in single data structure)
     flds1 = fieldnames(tmp1);
-    for ifld1=2:length(flds1) % skips time field
+    for ifld1=2:length(flds1) % index 2 - skips time field
          tmp.(flds1{ifld1}) = nan(size(tmp.time));
          if ~isempty(tmp1.time)
-            tmp.(flds1{ifld1}) = interp1(tmp1.time, tmp1.(flds1{ifld1}), tmp.time);
+            tmp.(flds1{ifld1}) = interp1(tmp1.time, tmp1.(flds1{ifld1}), tmp.time)
          endif
     endfor
-
+    
     flds2 = fieldnames(tmp2);
     for ifld2=2:length(flds2) % skips time field
          tmp.(flds2{ifld2}) = nan(size(tmp.time));

@@ -60,9 +60,15 @@ function WAPvars = rd_wap_amt(flowdir, filename, fileext, dh8_instruments, dh8_p
       endif
       % Add to output variable
       WAPvars.flow = flow;
+      
    catch
        disp('No flow data');
-       keyboard
+       [tmp_flow] = deal([]) ; # tjor - lines 66-71 - were added when backprocessing AMT27 - this allows for case of `no-flow'
+       flow.time = [];         # data to be accounted for.
+       flow.Hz = [];        
+       flow.valve = [];
+       WAPvars.flow = flow;
+       # keyboard
    end_try_catch
    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

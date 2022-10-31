@@ -133,7 +133,7 @@ PATH_TSG = [PATH_SHIP,'TSG/']; %
 # Input parameters for ship"s underway data
 
 # file paths for GGA function
-FUNC_GGA = @rd_seatech_gga_discovery; # note: handle not used explictly for disco processing
+FUNC_GGA = []; # @rd_seatech_gga_discovery; # note: handle not used explictly for disco processing
 
 DIR_GPS = PATH_GPS; 
 FN_GPS =  '*position-Applanix_GPS*';
@@ -146,7 +146,7 @@ FN_DEPTH = '*EA640_DY1*';
 
 
 # file paths for Oceanlogger function
-FUNC_OL = @rd_oceanlogger_discovery;  # note: handle not used explictly for disco processing
+FUNC_OL = []; # @rd_oceanlogger_discovery;  # note: handle not used explictly for disco processing
 
 DIR_TS = PATH_TS;  
 FN_SURF = '*Surf-DY-SM_DY1*';  

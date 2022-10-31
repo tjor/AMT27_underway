@@ -5,8 +5,8 @@
    PLOT = 1;
 
    % Load paths and common variables
-   run("input_parameters.m")
-   %run("../input_parameters.m")
+   #run("input_parameters.m")
+   run("../input_parameters.m")
    
 
    global OUT_PROC # this is for plot_spectra2.m
@@ -29,10 +29,9 @@
    endfor
 
    dailyfiles = dir(  [DIR_STEP1 "*mat"]  ); % redundancy with line 27? (just different format)
-
-   %first_day = 1;   
-   for iday = first_day:last_day
-       
+  
+   for iday = first_day: last_day
+   
         disp(["\n---------" dailyfiles(iday).name "--------\n"] )
         fflush(stdout);
 
@@ -55,6 +54,8 @@
                 DIR_TS, FN_SURF, FN_METDATA, FN_LIGHT,\
                 DIR_TSG, FN_TSG);
          
+       #  keyboard
+
        %  JCR version of underway function (e.g. AMT28)     
        % uway = step2h_ships_underway_amt_make_processed(jdays(iday), \
         %        DIR_GPS, GLOB_GPS, FN_GPS, FNC_GPS, \

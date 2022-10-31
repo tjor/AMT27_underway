@@ -17,7 +17,7 @@ function step1par(jday)
    % Create date range
    [numdates, strdates, vecdates, jdays] = get_date_range(inidate,enddate);
    % Get strdates corresponding to jday
-   keyboard
+
    strdate = strdates(jdays==jday,:);
 
    doy = sprintf('%d',jday);

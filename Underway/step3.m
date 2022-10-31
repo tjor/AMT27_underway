@@ -128,11 +128,11 @@ fn = dir([din "*mat"]);
 % Check each time if they are present or not among the file variablesi
 
 
-
 for ifn = 1:size(fn,1)
+   
     disp(["\n" fn(ifn).name])
     load([din fn(ifn).name]);
-    
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % COMMENTED 2019 10 23 FN
     %
@@ -198,7 +198,7 @@ for ifn = 1:size(fn,1)
 
     endif
       
-    
+        
     % Check if cstar variable exists
     if ~isempty(intersect('cstar',fieldnames(out)))
         % load cstar data into amt_optics
