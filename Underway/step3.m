@@ -2,8 +2,8 @@
 clear all
 %pkg load time
 
-%run('../input_parameters.m')
-run('input_parameters.m')
+run('../input_parameters.m')
+#run('input_parameters.m')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COMMENTED 2019 10 23 FN
@@ -257,7 +257,7 @@ amt_optics.acs.time = amt_optics.acs.time + t0     ;%
 amt_optics.ac9.time = amt_optics.ac9.time + t0     ;%   
                                       
 
-% Interpolate ship's underway on acs time  % tjor: p
+% Interpolate ship's underway on acs time  % tjor: 
 % Starting from 2 removes time from the uway field
 for ifield = 1:length(fields)
  %   amt_optics.uway.(fields{ifield}) = interp1(total_uway.time, total_uway.(fields{ifield}), amt_optics.time);
@@ -291,6 +291,12 @@ endif
 eval([lower(CRUISE) '= amt_optics;']) # create amtXX structure
 
 
+### Outlier filtering based on flow-rate and salinity ### - added by tjor during back-processing in 2022.
+### 
+
+flow_threshold = 20;
+sal_threshold = 33; 
+amt_optics = filter_flow_and_sal(amt_optics, flow_threshold, sal_threshold); 
 
 
 if ~exist(DIR_STEP3,'dir')
@@ -306,10 +312,10 @@ save('-v6', [DIR_STEP3 lower(CRUISE) '_optics.mat'], lower(CRUISE))
 % 
 % save -v6 amt22_chl.mat amt_chl
 % 
+% Outlier filtering
 % 
 % 
-% %
-% %
+% 
 %  out = [amt_optics.time-t0 amt_optics.undwy.lat amt_optics.undwy.lon amt_optics.acs.ap(:,wv532) amt_optics.acs.cp(:,wv532) amt_optics.bb3.bbp(:,2)];
 %  save -ascii surface_optics_amt22.dat out
 
