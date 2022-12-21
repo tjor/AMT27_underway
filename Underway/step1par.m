@@ -43,6 +43,7 @@ function step1par(jday)
    %---GRG----
    wp = dir([wapdir,fn1, '*19_T_ASCII*']);  %identify each hour of 'iday'
 
+keyboard
    %break up the name
    for iwp = 1:size(wp,1)
       [token, remainder] = strtok(wp(iwp).name,'.');

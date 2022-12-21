@@ -299,6 +299,7 @@ sal_threshold = 33;
 amt_optics = filter_flow_and_sal(amt_optics, flow_threshold, sal_threshold); 
 
 
+
 if ~exist(DIR_STEP3,'dir')
     mkdir(DIR_STEP3)
 endif
