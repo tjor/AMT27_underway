@@ -8,9 +8,9 @@
 
 
 # this is to make the Jupyter notebook as wide as the screen (on the Mac at least)
-#from IPython.core.display import display, HTML
-#display(HTML("<style>.container { width:100% !important; }</style>"))
-#get_ipython().run_line_magic('config', "InlineBackend.figure_format ='retina'")
+from IPython.core.display import display, HTML
+display(HTML("<style>.container { width:100% !important; }</style>"))
+get_ipython().run_line_magic('config', "InlineBackend.figure_format ='retina'")
 
 
 # In[2]:
@@ -27,7 +27,7 @@ from datetime import datetime as dt
 # In[3]:
 
 
-#get_ipython().run_line_magic('matplotlib', 'notebook')
+get_ipython().run_line_magic('matplotlib', 'notebook')
 
 
 # In[4]:
