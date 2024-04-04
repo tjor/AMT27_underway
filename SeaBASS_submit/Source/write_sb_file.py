@@ -31,7 +31,7 @@ def hdr(amt, fn_cal, fn_docs):
     "/begin_header": "",
     "/received=": "",
     "/investigators=": "Giorgio_DallOlmo,Tom_Jordan,Gavin_Tilstone",
-    "/affiliations=": "Plymouth_Marine_Laboratory,OGS",
+    "/affiliations=": "Plymouth_Marine_Laboratory",
     "/contact=": "gdallolmo@ogs.it,tjor@pml.ac.uk,ghti@pml.ac.uk",
     "/experiment=": "AMT",
     "/cruise=": amt.attrs['cruise_name'],
@@ -325,7 +325,7 @@ def data_table_hplc(amt):
     day = [pd.to_datetime(str(idt)).strftime('%d') for idt in amt.hplc_time.values] # picks out hplc dates and times
     day = pd.Series(day, index = amt.hplc_time.values)
     time = times
-   # bottle = amt['hplc_bottle'].to_pandas() not present
+    # bottle = amt['hplc_bottle'].to_pandas() not present
     volfilt = amt['hplc_volume'].to_pandas() # litee
       
     # pigments
@@ -339,31 +339,31 @@ def data_table_hplc(amt):
     diato = amt['hplc_Diato'].to_pandas()
     dp = amt['hplc_DP'].to_pandas()
     dv_chl_a = amt['hplc_DV_Chl_a'].to_pandas()
-    # dv_chl_b - not present in AMT28
+    # dv_chl_b - not present in AMT27
     fuco = amt['hplc_Fuco'].to_pandas()
-    # gyro - not present in AMT28
+    # gyro - not present in AMT27
     hex_fuco = amt['hplc_Hex-fuco'].to_pandas()
     lut = amt['hplc_Lut'].to_pandas()
     mv_chl_a = amt['hplc_MV_Chl_a'].to_pandas()
-    # mv_chl_b - not present in AMT28
+    # mv_chl_b - not present in AMT27
     neo = amt['hplc_Neo'].to_pandas()
     perid = amt['hplc_Perid'].to_pandas()
     phide_a = amt['hplc_Phide_a'].to_pandas()
     phytin_a = amt['hplc_Phytin_a'].to_pandas()
     ppc = amt['hplc_PPC'].to_pandas()
-    # ppc_tcar - not present in AMT28 
-    # ppc_tpg- not present in AMT28 
+    # ppc_tcar - not present in AMT27 
+    # ppc_tpg- not present in AMT27
     pras = amt['hplc_Pras'].to_pandas()
     psc = amt['hplc_PSC'].to_pandas()
-    # psc_tar- not present in AMT28 
+    # psc_tar- not present in AMT27 
     psp = amt['hplc_PSP'].to_pandas()
-    # psc_tpg- not present in AMT28 
+    # psc_tpg- not present in AMT27 
     tacc = amt['hplc_Tacc'].to_pandas()
-    # tacc_tchla - not present in AMT28 
+    # tacc_tchla - not present in AMT27 
     tcar = amt['hplc_Tcar'].to_pandas()
     tchl = amt['hplc_Tchl'].to_pandas()
-    # tchla_tpg - not present in AMT28
-    # tchla_tcar - not present in AMT28
+    # tchla_tpg - not present in AMT27
+    # tchla_tcar - not present in AMT27
     tot_chl_a = amt['hplc_Tot_Chl_a'].to_pandas()
     tot_chl_b = amt['hplc_Tot_Chl_b'].to_pandas()
     tot_chl_c = amt['hplc_Tot_Chl_c'].to_pandas()
@@ -372,10 +372,7 @@ def data_table_hplc(amt):
     zea = amt['hplc_Zea'].to_pandas()
 
 
-
-    print('     concatenating Series...')
-
-    
+    print('     concatenating Series...')    
     amt2csv = pd.concat([sample,depth,lat,lon,year,month,day,time,volfilt,allo,alpha_beta_car,but_fuco,chl_c1c2, chl_c3, chlide_a,diadino,diato,dp,dv_chl_a,fuco,hex_fuco,lut,mv_chl_a,neo,perid,phide_a,phytin_a,ppc,pras,psc,psp,tacc,tcar,tchl,tot_chl_a,tot_chl_b,tot_chl_c,tpg,viola,zea],  axis=1)
 
     # assign column names (hardcoded based on _fields)
@@ -450,8 +447,7 @@ if __name__ == '__main__':
 
         # prepare header
         header = hdr(amt, fn_cal, fn_docs)
-        header_hplc = hdr_hplc(amt,fn_docs_hplc)
-        
+        header_hplc = hdr_hplc(amt,fn_docs_hplc)        
 
         # prepare data
         amt2csv = data_table(amt)
@@ -459,15 +455,15 @@ if __name__ == '__main__':
 
         # write file
         fnout = '../sb_processed/' + header['/data_file_name=']
-        export_2_seabass(header, amt2csv, fnout)
+      #  export_2_seabass(header, amt2csv, fnout)
         
         # write file
         fnout_hplc = '../sb_processed/' + header_hplc['/data_file_name=']
-        export_2_seabass(header_hplc, amt2csv_hplc, fnout_hplc)
+       # export_2_seabass(header_hplc, amt2csv_hplc, fnout_hplc)
 
-        # run fcheck
-        # run_fcheck(fnout)
-        # run_fcheck(fnout_hplc)
+       # run fcheck
+        run_fcheck(fnout)
+        run_fcheck(fnout_hplc)
 
 
      # previous argv implementation
