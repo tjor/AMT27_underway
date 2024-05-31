@@ -73,6 +73,12 @@ def hdr(amt, fn_cal, fn_docs):
     for iwv in amt.wv.values:# add std_ap
         _fields = _fields + "ap" + str(iwv) + "_unc,"
         _units = _units + "1/m,"
+    for iwv in amt.wv.values:# add bp
+        _fields = _fields + "bp" + str(iwv) + ","
+        _units = _units + "1/m,"
+    for iwv in amt.wv.values:# add std_bp
+        _fields = _fields + "bp" + str(iwv) + "_unc,"
+        _units = _units + "1/m,"
     for iwv in amt.wv.values:# add std_ap
         _fields = _fields + "cp" + str(iwv) + ","
         _units = _units + "1/m,"
@@ -251,6 +257,8 @@ def data_table(amt):
     sal = amt['uway_sal'].to_pandas()
     acs_ap = amt['acs_ap'].to_pandas()
     acs_ap_u = amt['acs_ap_u'].to_pandas()
+    acs_bp = amt['acs_bp'].to_pandas()
+    acs_bp_u = amt['acs_bp_u'].to_pandas()
     acs_cp = amt['acs_cp'].to_pandas()
     acs_cp_u = amt['acs_cp_u'].to_pandas()
     acs_N = amt['acs_N'].to_pandas()
@@ -267,6 +275,8 @@ def data_table(amt):
     sal              = sal[i_acs_ap_good]
     acs_ap           = acs_ap[i_acs_ap_good]
     acs_ap_u         = acs_ap_u[i_acs_ap_good]
+    acs_bp           = acs_bp[i_acs_ap_good]
+    acs_bp_u         = acs_bp_u[i_acs_ap_good]
     acs_cp           = acs_cp[i_acs_ap_good]
     acs_cp_u         = acs_cp_u[i_acs_ap_good]
     acs_N            = acs_N[i_acs_ap_good]
@@ -279,8 +289,7 @@ def data_table(amt):
     
 
     print('     concatenating Series...')
-    amt2csv = pd.concat([dates, times, lat, lon, sst, sal, acs_ap, acs_ap_u, acs_cp, acs_cp_u, acs_N, acs_chl_debiased], axis=1)
-
+    amt2csv = pd.concat([dates, times, lat, lon, sst, sal, acs_ap, acs_ap_u, acs_bp, acs_bp_u, acs_cp, acs_cp_u, acs_N, acs_chl_debiased], axis=1)
 
     print('     concatenating Series...')
     
@@ -377,10 +386,10 @@ def data_table_hplc(amt):
 
     # assign column names (hardcoded based on _fields)
     print(' assigning hplc pigments...')
-  #  _fields ='sample,station,depth,lat,lon,year,month,day,time,bottle,volfilt,allo,alpha-beta-car,but-fuco,chl_c1c2, chl_c3, chlide_a,diadino,diato,dp,dv_chl_a,fuco,hex-fuco,lut,mv_chl_a,neo,perid,phide_a,phytin_a,ppc,pras,psc,psp,tacc,tcar,tchl,tot_chl_a,tot_chl_b,tot_chl_c,tpg,viola,zea' # caution: copied from hdr function
-   # col_hplc = _fields.strip().split(',') 
+    #  _fields ='sample,station,depth,lat,lon,year,month,day,time,bottle,volfilt,allo,alpha-beta-car,but-fuco,chl_c1c2, chl_c3, chlide_a,diadino,diato,dp,dv_chl_a,fuco,hex-fuco,lut,mv_chl_a,neo,perid,phide_a,phytin_a,ppc,pras,psc,psp,tacc,tcar,tchl,tot_chl_a,tot_chl_b,tot_chl_c,tpg,viola,zea' # caution: copied from hdr function
+    #  col_hplc = _fields.strip().split(',') 
     
-  #  amt2csv.columns = col_hplc
+    # amt2csv.columns = col_hplc
     
     
     print('...done')
@@ -446,58 +455,58 @@ if __name__ == '__main__':
         amt.attrs['cruise_name'] = amt_no.upper()
 
         # prepare header
-        header = hdr(amt, fn_cal, fn_docs)
-        header_hplc = hdr_hplc(amt,fn_docs_hplc)        
+        header_acs = hdr(amt, fn_cal, fn_docs)
+        header_hplc = hdr_hplc(amt, fn_docs_hplc)        
 
         # prepare data
-        amt2csv = data_table(amt)
+        amt2csv_acs = data_table(amt)
         amt2csv_hplc = data_table_hplc(amt)
 
         # write file
-        fnout = '../sb_processed/' + header['/data_file_name=']
-      #  export_2_seabass(header, amt2csv, fnout)
+        fnout_acs = '../sb_processed/' + header_acs['/data_file_name=']
+        export_2_seabass(header_acs, amt2csv_acs, fnout_acs)
         
         # write file
         fnout_hplc = '../sb_processed/' + header_hplc['/data_file_name=']
-       # export_2_seabass(header_hplc, amt2csv_hplc, fnout_hplc)
+        export_2_seabass(header_hplc, amt2csv_hplc, fnout_hplc)
 
-       # run fcheck
-        run_fcheck(fnout)
+        # run fcheck
+        run_fcheck(fnout_acs)
         run_fcheck(fnout_hplc)
 
 
-     # previous argv implementation
-    # if len(sys.argv) == 1:
-    #    print('ERROR: missing path of NetCDF file to process')
-    #else:
-    #    print(sys.argv[1]) # argv[1] = path of debiased nc file
-    #    # extract cruise name
-    #    amt_no = sys.argv[1].split("/")[-1].split("_")[0]
-
-        # calibration file
-    #    fn_cal = sys.argv[2] # argv[2] = acs dev file
-
-        # document files
-    #    fn_docs = sys.argv[3]  # checklist_acs_particulate_inline_AMT29.rtf,checklist_acs_ag_cg_AMT29.rtf,AMT29_ACS_inline_ProcessingReport_v20220810.docx
-
-        # read ncdf file
-    #    amt = rd_amt_ncdf(sys.argv[1])
-
-        # add cruise no (all caps) to amt xr.dataset
-     #   amt.attrs['cruise_name'] = amt_no.upper()
-
-        # prepare header
-     #   header = hdr(amt, fn_cal, fn_docs)
-
-        # prepare data
-       # amt2csv = data_table(amt)
-
-        # write file
-        #fnout = '../sb/' + header['/data_file_name=']
-        #export_2_seabass(header, amt2csv, fnout)
-
-        # run fcheck
-        #run_fcheck(fnout)
+         # previous argv implementation
+        # if len(sys.argv) == 1:
+        #    print('ERROR: missing path of NetCDF file to process')
+        #else:
+        #    print(sys.argv[1]) # argv[1] = path of debiased nc file
+        #    # extract cruise name
+        #    amt_no = sys.argv[1].split("/")[-1].split("_")[0]
+    
+            # calibration file
+        #    fn_cal = sys.argv[2] # argv[2] = acs dev file
+    
+            # document files
+        #    fn_docs = sys.argv[3]  # checklist_acs_particulate_inline_AMT29.rtf,checklist_acs_ag_cg_AMT29.rtf,AMT29_ACS_inline_ProcessingReport_v20220810.docx
+    
+            # read ncdf file
+        #    amt = rd_amt_ncdf(sys.argv[1])
+    
+            # add cruise no (all caps) to amt xr.dataset
+         #   amt.attrs['cruise_name'] = amt_no.upper()
+    
+            # prepare header
+         #   header = hdr(amt, fn_cal, fn_docs)
+    
+            # prepare data
+           # amt2csv = data_table(amt)
+    
+            # write file
+            #fnout = '../sb/' + header['/data_file_name=']
+            #export_2_seabass(header, amt2csv, fnout)
+    
+            # run fcheck
+            #run_fcheck(fnout)
 
 
 
