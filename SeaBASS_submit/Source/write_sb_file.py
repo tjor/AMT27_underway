@@ -56,7 +56,7 @@ def hdr(amt, fn_cal, fn_docs):
     "/missing=": "-9999",
     "/delimiter=": "comma",
     "/fields=": "",
-    "/units=": "yyyymmdd, hh:mm: ss, degrees, degrees, degreesC, PSU, 1/m, 1/m, 1/m, 1/m, none, ug/L",
+    "/units=": "yyyymmdd, hh:mm: ss, degrees, degrees, degreesC, PSU, 1/m, 1/m, 1/m, 1/m, 1/m, 1/m, none, ug/L",
     "/end_header": "",
     }
 
